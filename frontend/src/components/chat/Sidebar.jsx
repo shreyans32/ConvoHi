@@ -23,6 +23,7 @@ import {
   Image as ImageIcon
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+
 const Sidebar = () => {
   const { user } = useAuth();
   const {
@@ -38,10 +39,12 @@ const Sidebar = () => {
   const { onlineUsers } = useSocket();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+
   const [activeTab, setActiveTab] = useState('direct'); // 'direct' or 'groups'
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
+
   // Group Create Modal State
   const [showGroupModal, setShowGroupModal] = useState(false);
   const [groupName, setGroupName] = useState('');
@@ -52,10 +55,12 @@ const Sidebar = () => {
   const [groupSearchQuery, setGroupSearchQuery] = useState('');
   const [groupSearchResults, setGroupSearchResults] = useState([]);
   const [creating, setCreating] = useState(false);
+
   useEffect(() => {
     fetchChats();
     fetchGroups();
   }, []);
+
   // Search users for starting 1-to-1 chats
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
@@ -73,8 +78,10 @@ const Sidebar = () => {
         setSearching(false);
       }
     }, 400);
+
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery]);
+
   // Search users for group creation modal
   useEffect(() => {
     if (!showGroupModal) return;
@@ -90,8 +97,10 @@ const Sidebar = () => {
         console.error(err);
       }
     }, 300);
+
     return () => clearTimeout(delayDebounceFn);
   }, [groupSearchQuery, showGroupModal]);
+
   const handleStartChat = async (targetUser) => {
     try {
       const { data } = await API.post('/chats', { userId: targetUser._id });
@@ -105,10 +114,12 @@ const Sidebar = () => {
       toast.error('Failed to open chat');
     }
   };
+
   const handleSelectChat = (chat, type) => {
     setActiveChat(chat);
     setActiveChatType(type);
   };
+
   const handleToggleMember = (userId) => {
     setSelectedMembers(prev => {
       if (prev.includes(userId)) {
@@ -117,6 +128,7 @@ const Sidebar = () => {
       return [...prev, userId];
     });
   };
+
   const handleGroupAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -124,13 +136,16 @@ const Sidebar = () => {
       setGroupAvatarPreview(URL.createObjectURL(file));
     }
   };
+
   const handleCreateGroupSubmit = async (e) => {
     e.preventDefault();
     if (!groupName) return toast.error('Group name is required');
     if (selectedMembers.length === 0) return toast.error('Select at least one member');
+
     setCreating(true);
     const result = await createGroup(groupName, groupDesc, selectedMembers, groupAvatar);
     setCreating(false);
+
     if (result) {
       setShowGroupModal(false);
       setGroupName('');
@@ -146,6 +161,7 @@ const Sidebar = () => {
       setActiveChatType('Group');
     }
   };
+
   // Date/Time Formatter
   const formatTime = (dateString) => {
     if (!dateString) return '';
@@ -163,11 +179,14 @@ const Sidebar = () => {
     if (diffDays < 7) return date.toLocaleDateString([], { weekday: 'long' });
     return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
   };
+
   const renderMessagePreview = (msg) => {
     if (!msg) return <span className="italic">No messages yet</span>;
     if (msg.isDeleted) return <span className="italic text-gray-400 dark:text-gray-500">This message was deleted</span>;
+
     const isSelf = msg.sender._id === user._id;
     const prefix = isSelf ? 'You: ' : '';
+
     if (msg.mediaType === 'image') {
       return (
         <span className="flex items-center gap-1">
@@ -182,32 +201,35 @@ const Sidebar = () => {
         </span>
       );
     }
+
     return `${prefix}${msg.content}`;
   };
+
   const getInitials = (name) => {
     if (!name) return 'U';
     return name.slice(0, 2).toUpperCase();
   };
+
   return (
     <aside className={`flex h-full w-full flex-col border-r border-gray-200/50 bg-white dark:border-gray-800/50 dark:bg-[#111b21] md:w-[350px] lg:w-[400px] shrink-0 transition-all ${activeChat ? 'hidden md:flex' : 'flex'}`}>
       
       {/* Top Header bar */}
-      <div className="flex items-center justify-between bg-gray-50 px-4 py-3 dark:bg-[#1e293b] border-b border-gray-200 dark:border-gray-800">
+      <div className="flex items-center justify-between bg-white/80 px-4 py-3.5 dark:bg-slate-900/80 border-b border-gray-100 dark:border-gray-800/60 sticky top-0 z-20 glass-header">
         {/* Rebranded Logo and Name */}
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#3B82F6] to-[#8B5CF6] text-white text-xs font-black shadow-sm">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#3B82F6] to-[#8B5CF6] text-white text-xs font-black shadow-sm transform hover:scale-105 transition-transform">
             Hi
           </div>
           <span className="text-lg font-black tracking-tight text-gray-900 dark:text-white">
             Convo<span className="logo-gradient-text">Hi</span>
           </span>
         </div>
-        
+
         <div className="flex items-center gap-1.5">
           {/* Create Group Icon */}
           <button
             onClick={() => setShowGroupModal(true)}
-            className="rounded-full p-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors"
+            className="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-655 dark:text-gray-300 transition-colors"
             title="Create Group"
           >
             <MessageSquarePlus className="h-5 w-5" />
@@ -216,17 +238,17 @@ const Sidebar = () => {
           {/* Light/Dark mode */}
           <button
             onClick={toggleTheme}
-            className="rounded-full p-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors"
+            className="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-655 dark:text-gray-300 transition-colors"
             title="Toggle Theme"
           >
-            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            {theme === 'dark' ? <Sun className="h-5 w-5 theme-icon-rotate" /> : <Moon className="h-5 w-5 theme-icon-rotate" />}
           </button>
+
           {/* User profile avatar settings button */}
           <button
             onClick={() => navigate('/profile')}
             className="relative ml-1 rounded-full border border-gray-200/80 dark:border-gray-700 transition-transform hover:scale-105"
             title="Profile Settings"
-            title="Settings"
           >
             {user?.avatar ? (
               <img
@@ -239,13 +261,14 @@ const Sidebar = () => {
                 {getInitials(user?.username)}
               </div>
             )}
-            <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-green-500 dark:border-gray-800" />
+            <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-green-500 dark:border-gray-800 animate-pulse-glow" />
           </button>
         </div>
       </div>
+
       {/* Global User Search Bar */}
-      <div className="p-3 bg-white dark:bg-[#111b21]">
-        <div className="relative flex items-center rounded-xl bg-gray-100 px-3 py-2 dark:bg-[#202c33] border border-transparent focus-within:border-chat-light-primary dark:focus-within:border-chat-dark-primary transition-all">
+      <div className="p-3.5 bg-white dark:bg-slate-900 border-b border-gray-100/50 dark:border-gray-800/40">
+        <div className="relative flex items-center rounded-xl bg-gray-50 px-3 py-2 dark:bg-slate-800 border border-gray-200/60 dark:border-slate-700/80 focus-within:border-[#3B82F6] focus-within:ring-4 focus-within:ring-blue-500/10 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all duration-250 shadow-sm">
           <Search className="h-5 w-5 text-gray-400 dark:text-gray-500" />
           <input
             type="text"
@@ -260,6 +283,7 @@ const Sidebar = () => {
             </button>
           )}
         </div>
+
         {/* Global Search Results Dropdown */}
         {searchQuery && (
           <div className="absolute left-0 z-30 mt-2 w-full border border-gray-200/50 bg-white py-2 shadow-xl dark:border-gray-800/50 dark:bg-[#1f2c33] rounded-b-xl max-h-[300px] overflow-y-auto">
@@ -293,23 +317,27 @@ const Sidebar = () => {
           </div>
         )}
       </div>
-      {/* Tabs Menu */}
-      <div className="flex border-b border-gray-200/50 dark:border-gray-800/50 px-2 py-1 bg-white dark:bg-[#111b21]">
-        <button
-          onClick={() => setActiveTab('direct')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold border-b-2 rounded-t-lg transition ${activeTab === 'direct' ? 'border-chat-light-primary dark:border-chat-dark-primary text-chat-light-primary dark:text-chat-dark-primary' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700'}`}
-        >
-          <User className="h-4 w-4" />
-          Chats
-        </button>
-        <button
-          onClick={() => setActiveTab('groups')}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold border-b-2 rounded-t-lg transition ${activeTab === 'groups' ? 'border-chat-light-primary dark:border-chat-dark-primary text-chat-light-primary dark:text-chat-dark-primary' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700'}`}
-        >
-          <Users className="h-4 w-4" />
-          Groups
-        </button>
+
+      {/* Tabs Menu (Segmented Control) */}
+      <div className="px-3.5 py-2 bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-gray-800/40">
+        <div className="flex bg-gray-100 dark:bg-slate-800 p-1 rounded-xl">
+          <button
+            onClick={() => setActiveTab('direct')}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-lg transition-all duration-200 ${activeTab === 'direct' ? 'bg-white dark:bg-slate-700 text-[#3B82F6] dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+          >
+            <User className="h-4 w-4" />
+            Chats
+          </button>
+          <button
+            onClick={() => setActiveTab('groups')}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-lg transition-all duration-200 ${activeTab === 'groups' ? 'bg-white dark:bg-slate-700 text-[#3B82F6] dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+          >
+            <Users className="h-4 w-4" />
+            Groups
+          </button>
+        </div>
       </div>
+
       {/* Conversation Thread List Container */}
       <div className="flex-1 overflow-y-auto bg-white dark:bg-[#111b21]">
         {activeTab === 'direct' ? (
@@ -322,11 +350,12 @@ const Sidebar = () => {
               const unreadCountObj = c.unreadCounts?.find(uc => uc.user === user?._id);
               const unreadCount = unreadCountObj ? unreadCountObj.count : 0;
               const isPinned = user?.pinnedChats?.includes(c._id);
+
               return (
                 <div
                   key={c._id}
                   onClick={() => handleSelectChat(c, 'Chat')}
-                  className={`flex cursor-pointer items-center justify-between border-b border-gray-100 dark:border-gray-900 px-4 py-3.5 transition hover:bg-gray-50 dark:hover:bg-[#2a3942] ${isActive ? 'bg-gray-100 dark:bg-[#2a3942]' : ''}`}
+                  className={`flex cursor-pointer items-center justify-between mx-2 my-1.5 px-3.5 py-3 rounded-xl transition-all duration-200 hover:bg-gray-50 dark:hover:bg-slate-850/60 ${isActive ? 'bg-blue-50/60 dark:bg-slate-800 shadow-sm' : ''} animate-fade-in-up`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="relative shrink-0">
@@ -354,6 +383,7 @@ const Sidebar = () => {
                       </p>
                     </div>
                   </div>
+
                   <div className="flex flex-col items-end gap-1.5 shrink-0 ml-2">
                     <span className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">
                       {formatTime(c.latestMessage?.createdAt || c.updatedAt)}
@@ -384,11 +414,12 @@ const Sidebar = () => {
               const unreadCountObj = g.unreadCounts?.find(uc => uc.user === user?._id);
               const unreadCount = unreadCountObj ? unreadCountObj.count : 0;
               const isPinned = user?.pinnedGroups?.includes(g._id);
+
               return (
                 <div
                   key={g._id}
                   onClick={() => handleSelectChat(g, 'Group')}
-                  className={`flex cursor-pointer items-center justify-between border-b border-gray-100 dark:border-gray-900 px-4 py-3.5 transition hover:bg-gray-50 dark:hover:bg-[#2a3942] ${isActive ? 'bg-gray-100 dark:bg-[#2a3942]' : ''}`}
+                  className={`flex cursor-pointer items-center justify-between mx-2 my-1.5 px-3.5 py-3 rounded-xl transition-all duration-200 hover:bg-gray-50 dark:hover:bg-slate-850/60 ${isActive ? 'bg-blue-50/60 dark:bg-slate-800 shadow-sm' : ''} animate-fade-in-up`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="relative shrink-0">
@@ -413,6 +444,7 @@ const Sidebar = () => {
                       </p>
                     </div>
                   </div>
+
                   <div className="flex flex-col items-end gap-1.5 shrink-0 ml-2">
                     <span className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">
                       {formatTime(g.latestMessage?.createdAt || g.updatedAt)}
@@ -437,6 +469,7 @@ const Sidebar = () => {
           )
         )}
       </div>
+
       {/* Group Creation Wizard Overlay */}
       {showGroupModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
@@ -447,6 +480,7 @@ const Sidebar = () => {
                 <X className="h-5 w-5" />
               </button>
             </div>
+
             <form onSubmit={handleCreateGroupSubmit} className="space-y-4">
               {/* Group avatar selection */}
               <div className="flex flex-col items-center justify-center">
@@ -462,9 +496,10 @@ const Sidebar = () => {
                 </label>
                 <span className="text-[10px] text-gray-400 mt-1">Group Avatar</span>
               </div>
+
               {/* Group input details */}
               <div>
-                <label className="text-xs font-semibold text-gray-505 uppercase">Group Name</label>
+                <label className="text-xs font-semibold text-gray-555 uppercase">Group Name</label>
                 <input
                   type="text"
                   required
@@ -474,8 +509,9 @@ const Sidebar = () => {
                   className="w-full mt-1 px-4 py-2 border rounded-xl bg-gray-50 dark:bg-gray-805 dark:border-gray-700 outline-none focus:ring-1 focus:ring-chat-light-primary"
                 />
               </div>
+
               <div>
-                <label className="text-xs font-semibold text-gray-505 uppercase">Description</label>
+                <label className="text-xs font-semibold text-gray-555 uppercase">Description</label>
                 <input
                   type="text"
                   placeholder="Enter description (optional)"
@@ -484,9 +520,10 @@ const Sidebar = () => {
                   className="w-full mt-1 px-4 py-2 border rounded-xl bg-gray-50 dark:bg-gray-805 dark:border-gray-700 outline-none focus:ring-1 focus:ring-chat-light-primary"
                 />
               </div>
+
               {/* Group member selector checkboxes */}
               <div>
-                <label className="text-xs font-semibold text-gray-505 uppercase">Invite Members ({selectedMembers.length})</label>
+                <label className="text-xs font-semibold text-gray-555 uppercase">Invite Members ({selectedMembers.length})</label>
                 <input
                   type="text"
                   placeholder="Search user to add..."
@@ -519,6 +556,7 @@ const Sidebar = () => {
                   </div>
                 )}
               </div>
+
               {/* Action Buttons */}
               <div className="flex gap-3 pt-3 border-t border-gray-200 dark:border-gray-800">
                 <button
@@ -540,7 +578,9 @@ const Sidebar = () => {
           </div>
         </div>
       )}
+
     </aside>
   );
 };
+
 export default Sidebar;

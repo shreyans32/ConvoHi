@@ -154,16 +154,16 @@ const ChatWindow = ({ onOpenGroupInfo }) => {
     return name.slice(0, 2).toUpperCase();
   };
   return (
-    <div className={`flex h-full flex-1 flex-col bg-[#efeae2] dark:bg-[#0b141a] transition-all relative ${activeChat ? 'flex' : 'hidden md:flex'}`}>
+    <div className={`flex h-full flex-1 flex-col bg-slate-50 dark:bg-slate-950 bg-gradient-to-b from-slate-50/50 to-slate-100/30 dark:from-[#0f172a]/30 dark:to-[#090d16]/30 transition-all relative ${activeChat ? 'flex' : 'hidden md:flex'}`}>
       
       {/* Header */}
       {activeChat ? (
         <>
-          <header className="z-10 flex items-center justify-between border-b border-gray-250 bg-white/90 px-4 py-3 shadow-sm backdrop-blur-md dark:border-gray-800 dark:bg-[#202c33]/90 text-gray-900 dark:text-gray-100">
+          <header className="z-10 flex items-center justify-between border-b border-gray-100 bg-white/80 px-4 py-3.5 shadow-sm backdrop-blur-md dark:border-slate-800/80 dark:bg-slate-900/80 text-gray-900 dark:text-gray-100 sticky top-0 glass-header">
             <div className="flex items-center gap-3 min-w-0">
               <button
                 onClick={() => setActiveChat(null)}
-                className="rounded-full p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 md:hidden"
+                className="rounded-full p-1.5 hover:bg-gray-100 dark:hover:bg-slate-800 md:hidden"
               >
                 <ArrowLeft className="h-5 w-5" />
               </button>
@@ -172,7 +172,7 @@ const ChatWindow = ({ onOpenGroupInfo }) => {
                   getOtherParticipant().avatar ? (
                     <img src={getOtherParticipant().avatar} className="h-10 w-10 rounded-full object-cover" />
                   ) : (
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 text-white font-bold text-sm">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#3B82F6] to-[#8B5CF6] text-white font-bold text-sm">
                       {getInitials(getOtherParticipant().username)}
                     </div>
                   )
@@ -180,24 +180,33 @@ const ChatWindow = ({ onOpenGroupInfo }) => {
                   activeChat.avatar ? (
                     <img src={activeChat.avatar} className="h-10 w-10 rounded-full object-cover" />
                   ) : (
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-500 text-white font-bold text-sm">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 text-white font-bold text-sm">
                       {getInitials(activeChat.name)}
                     </div>
                   )
                 )}
                 {activeChatType === 'Chat' && onlineUsers.includes(getOtherParticipant()._id) && (
-                  <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-green-500 dark:border-[#202c33]" />
+                  <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-green-500 dark:border-slate-900 animate-pulse-glow" />
                 )}
               </div>
               <div className="min-w-0">
-                <h3 className="text-sm font-bold truncate">
+                <h3 className="text-sm font-extrabold truncate text-gray-900 dark:text-white">
                   {activeChatType === 'Chat' ? getOtherParticipant().username : activeChat.name}
                 </h3>
-                <p className="text-[10px] text-gray-500 dark:text-gray-400 font-medium truncate mt-0.5">
-                  {activeChatType === 'Chat'
-                    ? onlineUsers.includes(getOtherParticipant()._id) ? 'Online' : 'Offline'
-                    : `${activeChat?.members?.length || 0} members`}
-                </p>
+                <div className="text-[10px] text-gray-500 dark:text-gray-400 font-bold truncate mt-0.5">
+                  {activeChatType === 'Chat' ? (
+                    onlineUsers.includes(getOtherParticipant()._id) ? (
+                      <span className="flex items-center gap-1 text-green-500">
+                        <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                        Online
+                      </span>
+                    ) : (
+                      <span>Offline</span>
+                    )
+                  ) : (
+                    <span>{activeChat?.members?.length || 0} members</span>
+                  )}
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-1.5">
@@ -252,11 +261,11 @@ const ChatWindow = ({ onOpenGroupInfo }) => {
               const isMenuOpen = activeMenuId === msg._id;
               return (
                 <div
-                  key={msg._id}
-                  onMouseEnter={() => setHoveredMessageId(msg._id)}
-                  onMouseLeave={() => { setHoveredMessageId(null); if (!isMenuOpen) setActiveMenuId(null); }}
-                  className={`flex flex-col ${isSelf ? 'items-end' : 'items-start'} relative group/msg`}
-                >
+                      key={msg._id}
+                      onMouseEnter={() => setHoveredMessageId(msg._id)}
+                      onMouseLeave={() => { setHoveredMessageId(null); setActiveMenuId(null); }}
+                      className={`flex flex-col ${isSelf ? 'items-end' : 'items-start'} relative group/msg animate-fade-in-up`}
+                    >
                   
                   {/* Sender name for group chats */}
                   {activeChatType === 'Group' && !isSelf && (
@@ -269,12 +278,12 @@ const ChatWindow = ({ onOpenGroupInfo }) => {
                     
                     {/* Message Bubble content */}
                     <div
-                      className={`rounded-2xl px-4.5 py-2.5 shadow-sm text-sm relative ${
-                        isSelf
-                          ? 'bg-chat-light-bubbleSelf dark:bg-chat-dark-bubbleSelf text-gray-900 dark:text-gray-100 rounded-tr-none'
-                          : 'bg-chat-light-bubbleOther dark:bg-chat-dark-bubbleOther text-gray-900 dark:text-gray-100 rounded-tl-none'
-                      }`}
-                    >
+                          className={`rounded-2xl px-4 py-2.5 shadow-sm text-sm relative border hover:shadow-md transition-shadow duration-205 ${
+                            isSelf
+                              ? 'bg-chat-light-bubbleSelf dark:bg-chat-dark-bubbleSelf text-gray-900 dark:text-gray-100 rounded-tr-none border-blue-100/30 dark:border-blue-900/20'
+                              : 'bg-chat-light-bubbleOther dark:bg-chat-dark-bubbleOther text-gray-900 dark:text-gray-100 rounded-tl-none border-gray-100 dark:border-slate-850/60'
+                          }`}
+                        >
                       {/* Reply preview inside bubble */}
                       {msg.replyTo && (
                         <div className="border-l-4 border-chat-light-primary dark:border-chat-dark-primary bg-black/5 dark:bg-white/5 pl-2 py-1 pr-1.5 rounded text-[11px] mb-2 text-gray-500 dark:text-gray-400 truncate max-w-full">
@@ -354,67 +363,61 @@ const ChatWindow = ({ onOpenGroupInfo }) => {
                         </div>
                       )}
                     </div>
-                    {/* Quick Reaction popup launcher (Hover action bubble) */}
-                    {(hoveredMessageId === msg._id || isMenuOpen) && !msg.isDeleted && (
-                      <div className="flex flex-col shrink-0 gap-1 mt-0.5">
-                        
-                        {/* Quick Reaction picker list on hover */}
-                        <div className="flex items-center gap-0.5 rounded-full bg-white dark:bg-gray-800 px-1 py-0.5 shadow-md border border-gray-150 dark:border-gray-700">
-                          {['👍', '❤️', '😂', '🔥'].map(emoji => (
-                            <button
-                              key={emoji}
-                              onClick={() => reactMessage(msg._id, emoji)}
-                              className="hover:scale-125 transition text-xs p-0.5"
-                            >
-                              {emoji}
-                            </button>
-                          ))}
-                        </div>
-                        {/* Actions toggle dropdown */}
-                        <div className="relative self-center">
-                          <button
-                            onClick={() => setActiveMenuId(isMenuOpen ? null : msg._id)}
-                            className="p-1 rounded-full bg-white dark:bg-gray-800 shadow-md border border-gray-150 dark:border-gray-750 text-gray-500"
-                          >
-                            <ChevronDown className="h-3 w-3" />
-                          </button>
-                          {isMenuOpen && (
-                            <div className="absolute right-0 z-20 mt-1 w-28 rounded-lg border border-gray-250 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800 text-xs">
+                    {/* Quick Reaction and Action Floating Toolbar on Hover */}
+                        {(hoveredMessageId === msg._id || isMenuOpen) && !msg.isDeleted && (
+                          <div className="flex items-center gap-1 px-1.5 py-1 rounded-full bg-white dark:bg-slate-800 shadow-md border border-gray-150 dark:border-slate-700 animate-fade-in-up self-center mx-2 shrink-0">
+                            {/* Reactions panel */}
+                            <div className="flex items-center gap-0.5 pr-1.5 border-r border-gray-150 dark:border-slate-700">
+                              {['👍', '❤️', '😂', '🔥'].map(emoji => (
+                                <button
+                                  key={emoji}
+                                  onClick={() => reactMessage(msg._id, emoji)}
+                                  className="hover:scale-125 transition text-xs p-0.5"
+                                  title={`React ${emoji}`}
+                                >
+                                  {emoji}
+                                </button>
+                              ))}
+                            </div>
+                         {/* Actions panel */}
+                            <div className="flex items-center gap-0.5 pl-1">
                               <button
-                                onClick={() => { setReplyMessage(msg); setActiveMenuId(null); }}
-                                className="flex w-full items-center gap-1.5 px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 text-left font-medium"
+                                onClick={() => setReplyMessage(msg)}
+                                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-slate-750 text-gray-500 hover:text-[#3B82F6] transition-colors"
+                                title="Reply"
                               >
-                                <CornerUpLeft className="h-3.5 w-3.5" /> Reply
+                                <CornerUpLeft className="h-3.5 w-3.5" />
                               </button>
                               
-                              {/* Edit/Delete only for sender */}
+                              <button
+                                onClick={() => togglePinMessage(msg._id)}
+                                className={`p-1 rounded-full hover:bg-gray-100 dark:hover:bg-slate-750 transition-colors ${msg.pinned ? 'text-yellow-500' : 'text-gray-500 hover:text-yellow-500'}`}
+                                title={msg.pinned ? 'Unpin' : 'Pin'}
+                              >
+                                <Pin className="h-3.5 w-3.5 rotate-45" />
+                              </button>
                               {isSelf && (
                                 <>
                                   <button
                                     onClick={() => startEditing(msg)}
-                                    className="flex w-full items-center gap-1.5 px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 text-left font-medium"
+                                    className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-slate-750 text-gray-500 hover:text-green-500 transition-colors"
+                                    title="Edit"
                                   >
-                                    <Edit3 className="h-3.5 w-3.5" /> Edit
+                                    <Edit3 className="h-3.5 w-3.5" />
                                   </button>
                                   <button
-                                    onClick={() => { togglePinMessage(msg._id); setActiveMenuId(null); }}
-                                    className="flex w-full items-center gap-1.5 px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 text-left font-medium"
+                                    onClick={() => { if (window.confirm('Delete this message?')) deleteMessage(msg._id); }}
+                                    className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-slate-750 text-gray-500 hover:text-red-500 transition-colors"
+                                    title="Delete"
                                   >
-                                    <Pin className="h-3.5 w-3.5 rotate-45" /> {msg.pinned ? 'Unpin' : 'Pin'}
+                                    <Trash2 className="h-3.5 w-3.5" />
                                   </button>
-                                  <button
-                                    onClick={() => { if (window.confirm('Delete message?')) deleteMessage(msg._id); }}
-                                    className="flex w-full items-center gap-1.5 px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 text-left font-medium text-red-500"
-                                  >
-                                    <Trash2 className="h-3.5 w-3.5" /> Delete
-                                  </button>
+                                  
                                 </>
                               )}
                             </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                           </div>
+                        )}
                   </div>
                 </div>
               );
