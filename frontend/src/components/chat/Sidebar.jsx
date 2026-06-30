@@ -211,7 +211,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className={`flex h-full w-full flex-col border-r border-gray-200/50 bg-white dark:border-gray-800/50 dark:bg-[#111b21] md:w-[350px] lg:w-[400px] shrink-0 transition-all ${activeChat ? 'hidden md:flex' : 'flex'}`}>
+    <aside className={`flex h-full w-full flex-col border-r border-gray-200/50 bg-white dark:border-gray-800/50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 md:w-[350px] lg:w-[400px] shrink-0 transition-all ${activeChat ? 'hidden md:flex' : 'flex'}`}>
       
       {/* Top Header bar */}
       <div className="flex items-center justify-between bg-white/80 px-4 py-3.5 dark:bg-slate-900/80 border-b border-gray-100 dark:border-gray-800/60 sticky top-0 z-20 glass-header">
@@ -229,7 +229,7 @@ const Sidebar = () => {
           {/* Create Group Icon */}
           <button
             onClick={() => setShowGroupModal(true)}
-            className="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-655 dark:text-gray-300 transition-colors"
+            className="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-600 dark:text-gray-300 transition-colors"
             title="Create Group"
           >
             <MessageSquarePlus className="h-5 w-5" />
@@ -238,7 +238,7 @@ const Sidebar = () => {
           {/* Light/Dark mode */}
           <button
             onClick={toggleTheme}
-            className="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-655 dark:text-gray-300 transition-colors"
+            className="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-600 dark:text-gray-300 transition-colors"
             title="Toggle Theme"
           >
             {theme === 'dark' ? <Sun className="h-5 w-5 theme-icon-rotate" /> : <Moon className="h-5 w-5 theme-icon-rotate" />}
@@ -268,7 +268,7 @@ const Sidebar = () => {
 
       {/* Global User Search Bar */}
       <div className="p-3.5 bg-white dark:bg-slate-900 border-b border-gray-100/50 dark:border-gray-800/40">
-        <div className="relative flex items-center rounded-xl bg-gray-50 px-3 py-2 dark:bg-slate-800 border border-gray-200/60 dark:border-slate-700/80 focus-within:border-[#3B82F6] focus-within:ring-4 focus-within:ring-blue-500/10 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all duration-250 shadow-sm">
+        <div className="relative flex items-center rounded-xl bg-gray-50 px-3 py-2 dark:bg-slate-800 border border-gray-200/60 dark:border-slate-700/80 focus-within:border-[#3B82F6] focus-within:ring-4 focus-within:ring-blue-500/10 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all duration-255 shadow-sm">
           <Search className="h-5 w-5 text-gray-400 dark:text-gray-500" />
           <input
             type="text"
@@ -330,7 +330,7 @@ const Sidebar = () => {
           </button>
           <button
             onClick={() => setActiveTab('groups')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-lg transition-all duration-200 ${activeTab === 'groups' ? 'bg-white dark:bg-slate-700 text-[#3B82F6] dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-lg transition-all duration-200 ${activeTab === 'groups' ? 'bg-white dark:bg-slate-700 text-[#3B82F6] dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-905 dark:hover:text-white'}`}
           >
             <Users className="h-4 w-4" />
             Groups
@@ -339,7 +339,7 @@ const Sidebar = () => {
       </div>
 
       {/* Conversation Thread List Container */}
-      <div className="flex-1 overflow-y-auto bg-white dark:bg-[#111b21]">
+      <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-slate-950">
         {activeTab === 'direct' ? (
           // Direct 1-to-1 list
           chats.length > 0 ? (
@@ -355,7 +355,7 @@ const Sidebar = () => {
                 <div
                   key={c._id}
                   onClick={() => handleSelectChat(c, 'Chat')}
-                  className={`flex cursor-pointer items-center justify-between mx-2 my-1.5 px-3.5 py-3 rounded-xl transition-all duration-200 hover:bg-gray-50 dark:hover:bg-slate-850/60 ${isActive ? 'bg-blue-50/60 dark:bg-slate-800 shadow-sm' : ''} animate-fade-in-up`}
+                  className={`flex cursor-pointer items-center justify-between mx-2 my-1.5 px-3.5 py-3 rounded-xl transition-all duration-200 bg-white dark:bg-slate-900 border border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-slate-800/60 ${isActive ? 'bg-blue-50/60 dark:bg-slate-800 shadow-sm' : ''} animate-fade-in-up`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="relative shrink-0">
@@ -378,7 +378,7 @@ const Sidebar = () => {
                       <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
                         {otherUser.username}
                       </h4>
-                      <p className={`text-xs truncate max-w-[200px] mt-0.5 ${unreadCount > 0 ? 'text-gray-950 dark:text-white font-bold' : 'text-gray-500 dark:text-gray-400'}`}>
+                      <p className={`text-xs truncate max-w-[200px] mt-0.5 ${unreadCount > 0 ? 'text-gray-955 dark:text-white font-bold' : 'text-gray-500 dark:text-gray-400'}`}>
                         {renderMessagePreview(c.latestMessage)}
                       </p>
                     </div>
@@ -419,7 +419,7 @@ const Sidebar = () => {
                 <div
                   key={g._id}
                   onClick={() => handleSelectChat(g, 'Group')}
-                  className={`flex cursor-pointer items-center justify-between mx-2 my-1.5 px-3.5 py-3 rounded-xl transition-all duration-200 hover:bg-gray-50 dark:hover:bg-slate-850/60 ${isActive ? 'bg-blue-50/60 dark:bg-slate-800 shadow-sm' : ''} animate-fade-in-up`}
+                  className={`flex cursor-pointer items-center justify-between mx-2 my-1.5 px-3.5 py-3 rounded-xl transition-all duration-200 bg-white dark:bg-slate-900 border border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-slate-800/60 ${isActive ? 'bg-blue-50/60 dark:bg-slate-800 shadow-sm' : ''} animate-fade-in-up`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="relative shrink-0">
@@ -439,7 +439,7 @@ const Sidebar = () => {
                       <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
                         {g.name}
                       </h4>
-                      <p className={`text-xs truncate max-w-[200px] mt-0.5 ${unreadCount > 0 ? 'text-gray-950 dark:text-white font-bold' : 'text-gray-500 dark:text-gray-400'}`}>
+                      <p className={`text-xs truncate max-w-[200px] mt-0.5 ${unreadCount > 0 ? 'text-gray-955 dark:text-white font-bold' : 'text-gray-500 dark:text-gray-400'}`}>
                         {renderMessagePreview(g.latestMessage)}
                       </p>
                     </div>
@@ -499,37 +499,37 @@ const Sidebar = () => {
 
               {/* Group input details */}
               <div>
-                <label className="text-xs font-semibold text-gray-555 uppercase">Group Name</label>
+                <label className="text-xs font-semibold text-gray-500 uppercase">Group Name</label>
                 <input
                   type="text"
                   required
                   placeholder="Enter name"
                   value={groupName}
                   onChange={e => setGroupName(e.target.value)}
-                  className="w-full mt-1 px-4 py-2 border rounded-xl bg-gray-50 dark:bg-gray-805 dark:border-gray-700 outline-none focus:ring-1 focus:ring-chat-light-primary"
+                  className="w-full mt-1 px-4 py-2 border rounded-xl bg-gray-50 dark:bg-slate-805 dark:border-gray-700 outline-none focus:ring-1 focus:ring-chat-light-primary"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-gray-555 uppercase">Description</label>
+                <label className="text-xs font-semibold text-gray-500 uppercase">Description</label>
                 <input
                   type="text"
                   placeholder="Enter description (optional)"
                   value={groupDesc}
                   onChange={e => setGroupDesc(e.target.value)}
-                  className="w-full mt-1 px-4 py-2 border rounded-xl bg-gray-50 dark:bg-gray-805 dark:border-gray-700 outline-none focus:ring-1 focus:ring-chat-light-primary"
+                  className="w-full mt-1 px-4 py-2 border rounded-xl bg-gray-50 dark:bg-slate-805 dark:border-gray-700 outline-none focus:ring-1 focus:ring-chat-light-primary"
                 />
               </div>
 
               {/* Group member selector checkboxes */}
               <div>
-                <label className="text-xs font-semibold text-gray-555 uppercase">Invite Members ({selectedMembers.length})</label>
+                <label className="text-xs font-semibold text-gray-500 uppercase">Invite Members ({selectedMembers.length})</label>
                 <input
                   type="text"
                   placeholder="Search user to add..."
                   value={groupSearchQuery}
                   onChange={e => setGroupSearchQuery(e.target.value)}
-                  className="w-full mt-1 px-4 py-2 border rounded-xl bg-gray-50 dark:bg-gray-805 dark:border-gray-700 outline-none focus:ring-1 focus:ring-chat-light-primary"
+                  className="w-full mt-1 px-4 py-2 border rounded-xl bg-gray-50 dark:bg-slate-805 dark:border-gray-700 outline-none focus:ring-1 focus:ring-chat-light-primary"
                 />
                 
                 {/* Search result list */}

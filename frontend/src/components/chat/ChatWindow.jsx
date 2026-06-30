@@ -154,7 +154,7 @@ const ChatWindow = ({ onOpenGroupInfo }) => {
     return name.slice(0, 2).toUpperCase();
   };
   return (
-    <div className={`flex h-full flex-1 flex-col bg-slate-50 dark:bg-slate-950 bg-gradient-to-b from-slate-50/50 to-slate-100/30 dark:from-[#0f172a]/30 dark:to-[#090d16]/30 transition-all relative ${activeChat ? 'flex' : 'hidden md:flex'}`}>
+    <div className={`flex h-full flex-1 flex-col bg-slate-50 dark:bg-slate-950 text-gray-900 dark:text-gray-100 bg-gradient-to-b from-slate-50/50 to-slate-100/30 dark:from-[#0f172a]/30 dark:to-[#090d16]/30 transition-all relative ${activeChat ? 'flex' : 'hidden md:flex'}`}>
       
       {/* Header */}
       {activeChat ? (

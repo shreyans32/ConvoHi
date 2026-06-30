@@ -7,7 +7,7 @@ const Dashboard = () => {
   const { activeChat } = useChat();
   const [showGroupInfo, setShowGroupInfo] = useState(false);
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-gray-50 dark:bg-gray-950 transition-colors duration-200">
+    <div className="flex h-screen w-screen overflow-hidden bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-200">
       <div className="flex h-full w-full relative">
         
         {/* Left Sidebar */}
